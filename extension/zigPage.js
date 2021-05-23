@@ -34,11 +34,11 @@ chrome.webRequest.onBeforeRequest.addListener(
             result = TXTCache[url.hostname][identafier];
             if(result){
                 console.log('pulling from cache: '+result);
-                chrome.tabs.executeScript(details.tabId, { //NOT WORKING BECSUE NO DATA:// PERM
+               /* chrome.tabs.executeScript(details.tabId, { //NOT WORKING BECSUE NO DATA:// PERM
                     code:
                     "window.history.replaceState({ additionalInformation: 'Updated the URL with JS' },'"+url.href+"','/sucked');"
-                });
-                return {redirectUrl:result.join()};
+                });*/
+                return {redirectUrl: result.join()};  //NOTE!!!!::: DOESNT WORK BECAYSE NO DATAP REFIX BECUASEN OT USING READ AS DATAURL
             }else
                 console.log('pathname not found');
             

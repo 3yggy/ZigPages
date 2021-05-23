@@ -4,7 +4,7 @@ window.onload=function(){
             if(file){
                 console.log(file);
                 let reader = new FileReader();
-                reader.onload = function(e) {
+                var process = function(c){
                     var e = document.createElement('div');
                     e.appendChild(document.createElement('hr'));
                     var x = document.createElement('label');
@@ -17,11 +17,11 @@ window.onload=function(){
                     name.innerText = file.name;
                     e.appendChild(name);
                     e.appendChild(document.createElement('br'));
-                    
                     var head = "!ZIG:"+file.name+".";
                     var chunkStep = 248-head.length;
-
-                    var chunks = this.result.match(new RegExp('.{1,' + chunkStep + '}', 'g'));
+                    console.log(c,head.length,chunkStep);
+                    var chunks = c.match(new RegExp('[\\s\\S]{1,' + chunkStep + '}', 'g'));
+                    console.log(chunks);
                     for(i=0;i<chunks.length;i++){
                         var entry = document.createElement('textarea');
                         entry.value=head+i+'='+chunks[i];
@@ -31,13 +31,25 @@ window.onload=function(){
                         entry.style.right=0;
                         entry.style.position='relative'
                         e.appendChild(entry);
-                        
                     }
-
-                    outputs.appendChild(e);
+                    outputs.appendChild(e);  
                 }
-                reader.readAsDataURL(file);
+                if(file.type.startsWith('text')){
+                    reader.onload = function() {
+                        var string="data:"+file.type+","+this.result
+                        if(!window.preserve)
+                            string = string.replace(/[\r\n]+/g," ").replace(/\s+/g, ' ').trim();
+                        process(string);
+                    }
+                    reader.readAsText(file);
+                }else{
+                    reader.onload = function() {
+                        process(this.result);
+                    }
+                    reader.readAsDataURL(file);
+                }
             }
         }
+        this.value="";
     }
 }
