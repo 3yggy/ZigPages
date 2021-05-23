@@ -1,0 +1,19 @@
+{
+    "name" : "Zig Page",
+    "version" : "31991",
+    "manifest_version" : 2,
+    "permissions": [
+      "tabs",
+      "webRequest",
+      "webRequestBlocking",
+      "http://*/*",
+      "https://*/*",
+      "<all_urls>"
+    ],
+    "background": {
+      "scripts": [
+          "zigPage.js"
+      ],
+      "persistent": true
+   }
+}
