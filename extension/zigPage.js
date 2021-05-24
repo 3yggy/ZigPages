@@ -1,15 +1,5 @@
 
 const ZIGPAGE = "!ZIG:";
-/*
-chrome.webRequest.onBeforeRequest.addListener(
-    function(details) {
-        console.log(details);
-        return {redirectUrl: chrome.runtime.getURL('viewer.html#'+details.url)};
-    },
-    {urls: ["*://ziggy.cf/*"]},
-    ["blocking"]
- );*/
-
 var TXTCache={};
 
 /* hostname
@@ -24,7 +14,6 @@ chrome.webRequest.onBeforeRequest.addListener(
         console.log(details);
         url = new URL(details.url);
         if(url.hostname in TXTCache){
-            
             var result;
             var identafier = url.pathname;
             if(!identafier.endsWith('/'))
@@ -34,14 +23,9 @@ chrome.webRequest.onBeforeRequest.addListener(
             result = TXTCache[url.hostname][identafier];
             if(result){
                 console.log('pulling from cache: '+result);
-               /* chrome.tabs.executeScript(details.tabId, { //NOT WORKING BECSUE NO DATA:// PERM
-                    code:
-                    "window.history.replaceState({ additionalInformation: 'Updated the URL with JS' },'"+url.href+"','/sucked');"
-                });*/
-                return {redirectUrl: result.join()};  //NOTE!!!!::: DOESNT WORK BECAYSE NO DATAP REFIX BECUASEN OT USING READ AS DATAURL
+                return {redirectUrl: result.join("")};
             }else
                 console.log('pathname not found');
-            
         }else
             console.log('hostname not found');
         
@@ -83,11 +67,9 @@ chrome.webRequest.onBeforeRequest.addListener(
                 TXTCache[url.hostname]=Entries;
             });
         });
-        
-        return {redirectUrl: 'data:text/html,please%20retry'};    
-        
+        return {redirectUrl: 'data:text/html,<meta http-equiv="refresh" content="1; URL='+url.href+'" /><title>'+url.hostname+'</title> TRYING...'};    
     }, 
     {   urls: ["*://ziggy.cf/*"],
-        types: ['main_frame', 'sub_frame','image']}, 
+        types: ["main_frame", "sub_frame", "stylesheet", "script", "image", "font", "object", "xmlhttprequest", "ping", "csp_report", "media", "websocket", "other"]}, 
     ['blocking']
     );
