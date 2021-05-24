@@ -1,5 +1,6 @@
 
 const ZIGPAGE = "!ZIG:";
+const ZIGREL = '!ZreL!';
 var TXTCache={};
 
 /* hostname
@@ -23,7 +24,21 @@ chrome.webRequest.onBeforeRequest.addListener(
             result = TXTCache[url.hostname][identafier];
             if(result){
                 console.log('pulling from cache: '+result);
-                return {redirectUrl: result.join("")};
+                data = result.join("");
+                
+                pfxIndex = data.indexOf(',');
+                if(pfxIndex!=-1){
+                    var prefix = data.substring(0,pfxIndex+1);
+                    if(prefix.endsWith(';base64,')){
+                        var body = data.substring(pfxIndex+1);
+                        var decoded = atob(body);
+                        decoded = decoded.replaceAll(ZIGREL,url.protocol+'//'+url.hostname);
+                        data=prefix+btoa(decoded);
+                        console.log(`transformed into `+data);
+                    }
+                }
+
+                return {redirectUrl: data};
             }else
                 console.log('pathname not found');
         }else
@@ -69,7 +84,7 @@ chrome.webRequest.onBeforeRequest.addListener(
         });
         return {redirectUrl: 'data:text/html,<meta http-equiv="refresh" content="1; URL='+url.href+'" /><title>'+url.hostname+'</title> TRYING...'};    
     }, 
-    {   urls: ["*://ziggy.cf/*"],
+    {   urls: ["*://zigpa.ga/*"],
         types: ["main_frame", "sub_frame", "stylesheet", "script", "image", "font", "object", "xmlhttprequest", "ping", "csp_report", "media", "websocket", "other"]}, 
     ['blocking']
     );
