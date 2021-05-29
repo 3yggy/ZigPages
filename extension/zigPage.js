@@ -48,9 +48,10 @@ chrome.webRequest.onBeforeRequest.addListener(
         var HighLevelQuery='https://dns.google.com/resolve?name='+url.hostname+'&type=TXT';
         var pending = true;
         var prom = new Promise(function(resolve){
-            fetch(HighLevelQuery)
+            fetch(HighLevelQuery,{cache: "no-store"})
             .then(r => r.json())
             .then(p => {
+                console.log(p);
                 var Entries = {}
                 p.Answer.forEach(function(t){
                     var resource = t.data;

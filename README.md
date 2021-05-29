@@ -1,7 +1,3 @@
 ## for static serving without a server
+# use [this extension](https://github.com/3yggy/ZigPages/tree/main/extension) to view zig pages
 
-# Concerns:
-- [ ] Using onBeforeRequest with redirectUrl does not preserve hostname, making the adress bar ugly (relative path support added)
-- [x] Using onBeforeRequest with redirectUrl does not preserve hostname, breaking absolute paths and making the adress bar ugly.
-- [ ] Situation demands cool protocall (zig://*), but this causes browser to defualt to search.
-- [ ] Want Zig Page installer for major dns providers.
